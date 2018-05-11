@@ -20,39 +20,53 @@ logger = logging.getLogger('urbanGUI')
 app = Flask(__name__)
 
 
-@app.route('/edu_server', methods=['POST', 'GET'])
-def hello():
-    if request.method == 'POST':
-        print request
+@app.route('/ticsdk_server', methods=['POST', 'GET'])
+def handle_request():
+
+    logger.info("request %s",request)
+    print request
+
+    data = request.get_data()
+    jsondata = json.loads(data)
+
+    if jsondata['cmd'] == "apply_classroom_id":  ###申请房间请求
         sdkappid = request.args.get("sdkappid")
-
-        if sdkappid is None:
+        if sdkappid is None: ###sdkappid 为空
             res = {}
-            res['status'] = -1
-            res['info'] = "param is not corret"
+            res['error_code'] = -1
+            res['error_msg'] = "sdkappid is None"
             response = Response(json.dumps(res),
                                 mimetype='application/json',
                                 )
             return response
-        else:
+        else:   ###正常请求
             res = {}
-            res['data'] = get_classId(sdkappid)
-            res['status'] = 200
-            res['info'] = "succ"
+            res['data'] = get_classId(sdkappid) ###为这个sdkappid分配ID
+            res['error_code'] = 200
+            res['error_msg'] = "succ"
             response = Response(json.dumps(res),
                                 mimetype='application/json',
                                 )
             return response
-
-    if request.method == 'GET':
-        print request
+    else:###cmd 不能识别
         res = {}
-        res['status'] = -1
-        res['info'] = "this is get request"
+        res['error_code'] = -2
+        res['error_msg'] = "cmd is wrong!! "
         response = Response(json.dumps(res),
                             mimetype='application/json',
                             )
         return response
+        pass
+
+    # if request.method == 'GET':
+    #     print request
+    #     res = {}
+    #     res['error_code'] = -1
+    #     res['error_msg'] = "this is get request"
+    #     response = Response(json.dumps(res),
+    #                         mimetype='application/json',
+    #                         )
+    #     return response
 
 
 @app.errorhandler(404)
@@ -61,8 +75,22 @@ def exception_handler(error):
     logger.error("exception_handler %s", error)
 
     error_info = {}
-    error_info['status'] = 404
-    error_info['info'] = "not found"
+    error_info['error_code'] = 404
+    error_info['error_msg'] = "not found"
+
+    response = Response(json.dumps(error_info),
+                        mimetype='application/json',
+                        status=error.code)
+    return response
+
+@app.errorhandler(400)
+def exception_handler(error):
+    print error
+    logger.error("exception_handler 400 %s", error)
+
+    error_info = {}
+    error_info['error_code'] = 400
+    error_info['error_msg'] = "400 Bad Request"
 
     response = Response(json.dumps(error_info),
                         mimetype='application/json',
