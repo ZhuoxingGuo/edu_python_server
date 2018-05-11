@@ -90,7 +90,7 @@ def get_classId(sdkappid):
         avroomid = 1001
         chatgroup = avroomid
         wbchannel = 1002
-        classid = str(avroomid)+"#"+str(chatgroup)+"#"+str(wbchannel)
+        classid = str(avroomid)+"||"+str(chatgroup)+"||"+str(wbchannel)
         conn.execute("INSERT INTO classroom (sdkappid, classid, avroomid, chatgroup,wbchannel) VALUES (?, ?, ?, ?, ?)",
                      (sdkappid, classid, avroomid, chatgroup, wbchannel))
         conn.commit()
@@ -105,7 +105,7 @@ def get_classId(sdkappid):
             avroomid = row[2]+2
             chatgroup = row[3]+2
             wbchannel = row[4]+2
-            classid = str(avroomid)+"#"+str(chatgroup)+"#"+str(wbchannel)
+            classid = str(avroomid)+"||"+str(chatgroup)+"||"+str(wbchannel)
 
             # 更新数据库
             conn = sqlite3.connect(g_path)
