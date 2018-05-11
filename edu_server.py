@@ -9,7 +9,7 @@ import logging
 g_path = 'classroom.db'
 g_create_sql = "CREATE TABLE classroom(sdkappid INTEGER,classid TEXT,avroomid INTEGER,chatgroup INTEGER,wbchannel INTEGER)"
 
-logging.basicConfig(filename="./logserver.log",
+logging.basicConfig(filename="./eduserver.log",
                     filemode='a',
                     format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                     datefmt='%H:%M:%S',
@@ -20,17 +20,13 @@ logger = logging.getLogger('urbanGUI')
 app = Flask(__name__)
 
 
-@app.route('/edu_server/applyclassroomid', methods=['POST', 'GET'])
+@app.route('/edu_server', methods=['POST', 'GET'])
 def hello():
     if request.method == 'POST':
         print request
-        return "200"
-
-    if request.method == 'GET':
-        print request
         sdkappid = request.args.get("sdkappid")
 
-        if sdkappid is None :
+        if sdkappid is None:
             res = {}
             res['status'] = -1
             res['info'] = "param is not corret"
@@ -41,12 +37,22 @@ def hello():
         else:
             res = {}
             res['data'] = get_classId(sdkappid)
-            res['status'] =200
+            res['status'] = 200
             res['info'] = "succ"
             response = Response(json.dumps(res),
                                 mimetype='application/json',
-                               )
+                                )
             return response
+
+    if request.method == 'GET':
+        print request
+        res = {}
+        res['status'] = -1
+        res['info'] = "this is get request"
+        response = Response(json.dumps(res),
+                            mimetype='application/json',
+                            )
+        return response
 
 
 @app.errorhandler(404)
