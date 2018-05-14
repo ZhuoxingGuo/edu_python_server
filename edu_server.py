@@ -33,7 +33,7 @@ def handle_request():
         sdkappid = request.args.get("sdkappid")
         if sdkappid is None: ###sdkappid 为空
             res = {}
-            res['error_code'] = -1
+            res['error_code'] = -12003
             res['error_msg'] = "sdkappid is None"
             response = Response(json.dumps(res),
                                 mimetype='application/json',
@@ -42,15 +42,15 @@ def handle_request():
         else:   ###正常请求
             res = {}
             res['data'] = get_classId(sdkappid) ###为这个sdkappid分配ID
-            res['error_code'] = 200
-            res['error_msg'] = "succ"
+            res['error_code'] = 0
+            res['error_msg'] = ""
             response = Response(json.dumps(res),
                                 mimetype='application/json',
                                 )
             return response
     else:###cmd 不能识别
         res = {}
-        res['error_code'] = -2
+        res['error_code'] = -12003
         res['error_msg'] = "cmd is wrong!! "
         response = Response(json.dumps(res),
                             mimetype='application/json',
