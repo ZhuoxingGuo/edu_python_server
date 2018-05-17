@@ -90,7 +90,7 @@ def handle_request():
                                   data={'Type': 'ChatRoom',
                                         'Name': 'chatgroup', 'GroupId': chatgroup_id})
         logger.info(" 2 chatgroup  %s    ", chatgroup)
-        print " 2 chatgroup  %s    ", chatgroup
+        print " 2 chatgroup      ", chatgroup.text
 
         # 创建白板通道
         ran2 = random.randint(0, 99999999)
@@ -101,7 +101,7 @@ def handle_request():
                                   data={'Type': 'ChatRoom',
                                         'Name': 'wbchannel', 'GroupId': wbchannel_id})
         logger.info(" 3 wbchannel  %s    ", wbchannel)
-        print" 3 wbchannel  %s    ", wbchannel
+        print" 3 wbchannel     ", wbchannel.text
         # 返回值
         if chatgroup['ErrorCode'] == 0 & wbchannel['ErrorCode'] == 0:
             res['error_code'] = 0
