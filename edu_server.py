@@ -51,6 +51,7 @@ def handle_request():
             return response
     elif jsondata['cmd'] == "create_classroom":  ###业务server请求创建房间
         logger.info(" 0  create_classroom request  %s   ", request)
+        print " 0  create_classroom request    ", request
         res = {}
         sdkappid = request.args.get("sdkappid")
         identifier = request.args.get("identifier")
@@ -75,7 +76,7 @@ def handle_request():
         chatgroup_id = str(result['chatgroup'])
 
         logger.info(" 1 create_classroom request  %s   param %s  classid  %s ", request, jsondata ,result)
-
+        print " 1 create_classroom request  %s   param %s  classid  %s ", request, jsondata ,result
 
 
         # 创建聊天群组
@@ -86,7 +87,7 @@ def handle_request():
                                  data={'Type': 'ChatRoom',
                                        'Name': 'chatgroup', 'GroupId':chatgroup_id})
         logger.info(" 2 chatgroup  %s    ", chatgroup)
-
+        print " 2 chatgroup  %s    ", chatgroup
 
 
 
@@ -98,7 +99,7 @@ def handle_request():
                                  data={'Type': 'ChatRoom',
                                        'Name': 'wbchannel', 'GroupId': wbchannel_id})
         logger.info(" 3 wbchannel  %s    ", wbchannel)
-
+        print" 3 wbchannel  %s    ", wbchannel
         #返回值
         if chatgroup['ErrorCode'] == 0 & wbchannel['ErrorCode'] == 0:
             res['error_code'] = 0
