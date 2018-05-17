@@ -105,7 +105,7 @@ def handle_request():
         logger.info(" 3 wbchannel  %s    ", wbchannel)
         print" 3 wbchannel     ", wbchannel.text
         # 返回值
-        if chatgroup['ErrorCode'] == 0 & wbchannel['ErrorCode'] == 0:
+        if  chatgroup.text['ErrorCode'] == 0 & wbchannel.text['ErrorCode'] == 0:
             res['error_code'] = 0
             res['error_msg'] = ""
             res['classid'] = result['classid']
@@ -115,8 +115,8 @@ def handle_request():
             res['error_code'] = -1
             res['error_msg'] = ""
             res['classid'] = ''
-            res['chatgroup_info'] = chatgroup
-            res['wbchannel_info'] = wbchannel
+            res['chatgroup_info'] = chatgroup.text
+            res['wbchannel_info'] = wbchannel.text
 
         response = Response(json.dumps(res),
                             mimetype='application/json',
