@@ -104,8 +104,10 @@ def handle_request():
                                   data=json.dumps(param))
         logger.info(" 3 wbchannel  %s    ", wbchannel)
         print" 3 wbchannel.text     ", wbchannel.text
+        res1 = json.load(wbchannel.text)
+        res2 = json.load(chatgroup.text)
         # 返回值
-        if  dict(chatgroup.text)['ErrorCode'] == 0 & dict(wbchannel.text)['ErrorCode'] == 0:
+        if res1['ErrorCode'] == 0 & res2['ErrorCode'] == 0:
             res['error_code'] = 0
             res['error_msg'] = ""
             res['classid'] = result['classid']
