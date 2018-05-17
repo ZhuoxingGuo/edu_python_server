@@ -4,6 +4,7 @@ import random
 
 from flask import Flask, jsonify, Response
 from flask import request
+import requests
 import json
 import os.path
 import logging
@@ -59,7 +60,7 @@ def handle_request():
 
         ##必须具备TPYE Name  sdkAPPID 如果任意有一个为空 直接退出
         # if jsondata['Type'] == None | jsondata['Name'] == None | jsondata['sdkappid'] == None:
-        if  sdkappid == None:
+        if sdkappid == None:
             res['error_code'] = -1
             res['error_msg'] = "param is not correct! "
             res['classid'] = ''
@@ -75,36 +76,37 @@ def handle_request():
         wbchannel_id = str(result['wbchannel'])
         chatgroup_id = str(result['chatgroup'])
 
-        logger.info(" 1 create_classroom request  %s   param %s  classid  %s ", request, jsondata ,result)
-        print " 1 create_classroom request  %s   param %s  classid  %s ", request, jsondata ,result
-
+        logger.info(" 1 create_classroom request  %s   param %s  classid  %s ", request, jsondata, result)
+        print " 1 create_classroom request   ", request
+        print " 1 create_classroom param  ", jsondata
+        print " 1 create_classroom classid  ", result
 
         # 创建聊天群组
         ran = random.randint(0, 99999999)
-        create_chatgroup_restapi = 'https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=' + usersig + '&identifier=' + str(identifier) + "&sdkappid=" + str(sdkappid) + '&random=' + str(ran) + '&contenttype=json'
+        create_chatgroup_restapi = 'https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=' + usersig + '&identifier=' + str(
+            identifier) + "&sdkappid=" + str(sdkappid) + '&random=' + str(ran) + '&contenttype=json'
         logger.info("create_room_restapi  %s    ", create_chatgroup_restapi)
-        chatgroup = request.post(create_chatgroup_restapi,
-                                 data={'Type': 'ChatRoom',
-                                       'Name': 'chatgroup', 'GroupId':chatgroup_id})
+        chatgroup = requests.post(create_chatgroup_restapi,
+                                  data={'Type': 'ChatRoom',
+                                        'Name': 'chatgroup', 'GroupId': chatgroup_id})
         logger.info(" 2 chatgroup  %s    ", chatgroup)
         print " 2 chatgroup  %s    ", chatgroup
 
-
-
         # 创建白板通道
         ran2 = random.randint(0, 99999999)
-        create_wbchannel_restapi = 'https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=' + usersig + '&identifier=' + str(identifier) + "&sdkappid=" + str(sdkappid) + '&random=' + str(ran2) + '&contenttype=json'
+        create_wbchannel_restapi = 'https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=' + usersig + '&identifier=' + str(
+            identifier) + "&sdkappid=" + str(sdkappid) + '&random=' + str(ran2) + '&contenttype=json'
         logger.info("create_room_restapi  %s    ", create_wbchannel_restapi)
-        wbchannel = request.post(create_wbchannel_restapi,
-                                 data={'Type': 'ChatRoom',
-                                       'Name': 'wbchannel', 'GroupId': wbchannel_id})
+        wbchannel = requests.post(create_wbchannel_restapi,
+                                  data={'Type': 'ChatRoom',
+                                        'Name': 'wbchannel', 'GroupId': wbchannel_id})
         logger.info(" 3 wbchannel  %s    ", wbchannel)
         print" 3 wbchannel  %s    ", wbchannel
-        #返回值
+        # 返回值
         if chatgroup['ErrorCode'] == 0 & wbchannel['ErrorCode'] == 0:
             res['error_code'] = 0
             res['error_msg'] = ""
-            res['classid']=result['classid']
+            res['classid'] = result['classid']
             res['chatgroup_info'] = ''
             res['wbchannel_info'] = ''
         else:
