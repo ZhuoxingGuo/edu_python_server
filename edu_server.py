@@ -79,7 +79,7 @@ def handle_request():
         logger.info(" 1 create_classroom request  %s   param %s  classid  %s ", request, jsondata, result)
         print " 1 create_classroom request   ", request
         print " 1 create_classroom param  ", jsondata
-        print " 1 create_classroom classid  ", result
+        print " 1 create_classroom classid wbchannel_id chatgroup_id ", result,wbchannel_id,chatgroup_id
 
 
         # # 创建聊天群组和白板通道
@@ -88,12 +88,11 @@ def handle_request():
         cg_res = handle_im_server(sdkappid, identifier, usersig, cg)
 
         wb = {'Type': 'ChatRoom',
-              'Name': 'chatgroup', 'GroupId': chatgroup_id}
+              'Name': 'wbchannel', 'GroupId': wbchannel_id}
         wb_res = handle_im_server(sdkappid, identifier, usersig, wb)
 
-        logger.info(" 1 destroy_classroom   wb_res %s  ", wb_res)
-        logger.info(" 1 destroy_classroom   cb_res  %s ", cg_res)
-        print " 2 destroy_classroom   wb_res cb_res  ", wb_res,cg_res
+        logger.info(" 1 destroy_classroom  cb_res  wb_res %s %s ", cg_res, wb_res)
+        print " 1 destroy_classroom   wb_res cb_res  ", wb_res,cg_res
 
         # 返回值
         res1 = json.loads(cg_res)
