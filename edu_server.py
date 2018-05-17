@@ -104,6 +104,8 @@ def handle_request():
                                   data=json.dumps(param))
         logger.info(" 3 wbchannel  %s    ", wbchannel)
         print" 3 wbchannel.text     ", wbchannel.text
+
+
         res1 = json.loads(wbchannel.text)
         res2 = json.loads(chatgroup.text)
         # 返回值
@@ -126,7 +128,50 @@ def handle_request():
         return response
 
     elif jsondata['cmd'] == "destroy_classroom":  ###业务server请求创建房间
-        pass
+
+        ###业务server请求创建房间 获取参数 分割classid
+        classid = jsondata['classid']
+        avroomid, chatgroup, wbchannel = classid.split("##")
+        res = {}
+        sdkappid = request.args.get("sdkappid")
+        identifier = request.args.get("identifier")
+        usersig = request.args.get("usersig")
+
+
+        logger.info(" 0  destroy_classroom request  %s   ", request)
+        print " 0  destroy_classroom request    ", request
+        print " 0 destroy_classroom param  ", jsondata
+        print " 0 destroy_classroom avroomid, chatgroup, wbchannel  ", avroomid, chatgroup, wbchannel
+
+        ###分别解散 wbchannel chatgroup
+        wb = {'GroupId': wbchannel}
+        wb_res = handle_im_server(sdkappid,identifier,usersig,wb)
+
+        cg = {'GroupId': chatgroup}
+        cb_res = handle_im_server(sdkappid,identifier,usersig,cg)
+
+
+        logger.info(" 1 destroy_classroom   wb_res   ", wb_res)
+        logger.info(" 1 destroy_classroom   cb_res   ", cb_res)
+        print " 1 destroy_classroom   wb_res   ", wb_res
+        print " 1 destroy_classroom   cb_res   ", cb_res
+
+
+        # 返回值处理
+        res1 = json.loads(wb_res)
+        res2 = json.loads(cb_res)
+        if res1['ErrorCode'] == 0 & res2['ErrorCode'] == 0:
+            res['error_code'] = 0
+            res['error_msg'] = ""
+        else  :
+            res['error_code'] = res1['ErrorCode']+res2['ErrorCode']
+            res['error_msg'] = res1['ErrorInfo']+res2['ErrorInfo']
+
+        response = Response(json.dumps(res),
+                            mimetype='application/json',
+                            )
+        return response
+
 
     else:  ###cmd 不能识别
         res = {}
@@ -176,6 +221,22 @@ def exception_handler(error):
                         mimetype='application/json',
                         status=error.code)
     return response
+
+
+
+def handle_im_server(sdkappid,identifier,usersig,param):
+    ran2 = random.randint(0, 99999999)
+    destroy_group_restapi = 'https://console.tim.qq.com/v4/group_open_http_svc/destroy_group?usersig=' + usersig + '&identifier=' + str(
+        identifier) + "&sdkappid=" + str(sdkappid) + '&random=' + str(ran2) + '&contenttype=json'
+    logger.info("create_room_restapi  %s    ", destroy_group_restapi)
+
+    res = requests.post(destroy_group_restapi,
+                              data=json.dumps(param))
+    logger.info(" handle_im_server      ", res.text)
+    print" handle_im_server    ", res.text
+
+    return res.text
+
 
 
 def initDb():
