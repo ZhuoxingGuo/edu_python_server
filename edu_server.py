@@ -151,8 +151,8 @@ def handle_request():
         cb_res = handle_im_server(sdkappid,identifier,usersig,cg)
 
 
-        logger.info(" 1 destroy_classroom   wb_res   ", wb_res)
-        logger.info(" 1 destroy_classroom   cb_res   ", cb_res)
+        logger.info(" 1 destroy_classroom   wb_res %s  ", wb_res)
+        logger.info(" 1 destroy_classroom   cb_res  %s ", cb_res)
         print " 1 destroy_classroom   wb_res   ", wb_res
         print " 1 destroy_classroom   cb_res   ", cb_res
 
@@ -232,7 +232,7 @@ def handle_im_server(sdkappid,identifier,usersig,param):
 
     res = requests.post(destroy_group_restapi,
                               data=json.dumps(param))
-    logger.info(" handle_im_server      ", res.text)
+    logger.info(" handle_im_server    %s  ", res.text)
     print" handle_im_server    ", res.text
 
     return res.text
