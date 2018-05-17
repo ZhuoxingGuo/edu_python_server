@@ -86,9 +86,10 @@ def handle_request():
         create_chatgroup_restapi = 'https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=' + usersig + '&identifier=' + str(
             identifier) + "&sdkappid=" + str(sdkappid) + '&random=' + str(ran) + '&contenttype=json'
         logger.info("create_room_restapi  %s    ", create_chatgroup_restapi)
+        param = {'Type': 'ChatRoom',
+                 'Name': 'chatgroup', 'GroupId': chatgroup_id}
         chatgroup = requests.post(create_chatgroup_restapi,
-                                  data={'Type': 'ChatRoom',
-                                        'Name': 'chatgroup', 'GroupId': chatgroup_id})
+                                  data=json.dumps(param))
         logger.info(" 2 chatgroup  %s    ", chatgroup)
         print " 2 chatgroup      ", chatgroup.text
 
@@ -97,9 +98,10 @@ def handle_request():
         create_wbchannel_restapi = 'https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=' + usersig + '&identifier=' + str(
             identifier) + "&sdkappid=" + str(sdkappid) + '&random=' + str(ran2) + '&contenttype=json'
         logger.info("create_room_restapi  %s    ", create_wbchannel_restapi)
+        param = {'Type': 'ChatRoom',
+                 'Name': 'chatgroup', 'GroupId': wbchannel_id}
         wbchannel = requests.post(create_wbchannel_restapi,
-                                  data={'Type': 'ChatRoom',
-                                        'Name': 'wbchannel', 'GroupId': wbchannel_id})
+                                  data=json.dumps(param))
         logger.info(" 3 wbchannel  %s    ", wbchannel)
         print" 3 wbchannel     ", wbchannel.text
         # 返回值
