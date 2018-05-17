@@ -91,7 +91,7 @@ def handle_request():
         chatgroup = requests.post(create_chatgroup_restapi,
                                   data=json.dumps(param))
         logger.info(" 2 chatgroup  %s    ", chatgroup)
-        print " 2 chatgroup      ", chatgroup.text
+        print " 2 chatgroup.text      ", chatgroup.text
 
         # 创建白板通道
         ran2 = random.randint(0, 99999999)
@@ -103,9 +103,9 @@ def handle_request():
         wbchannel = requests.post(create_wbchannel_restapi,
                                   data=json.dumps(param))
         logger.info(" 3 wbchannel  %s    ", wbchannel)
-        print" 3 wbchannel     ", wbchannel.text
+        print" 3 wbchannel.text     ", wbchannel.text
         # 返回值
-        if  chatgroup.text['ErrorCode'] == 0 & wbchannel.text['ErrorCode'] == 0:
+        if  dict(chatgroup.text)['ErrorCode'] == 0 & dict(wbchannel.text)['ErrorCode'] == 0:
             res['error_code'] = 0
             res['error_msg'] = ""
             res['classid'] = result['classid']
