@@ -234,12 +234,5 @@ def get_classId(sdkappid):
 if __name__ == "__main__":
     initDb()
     print "logserver listen 5000"
-    ran = random.randint(0, 99999999)
-    sdkappid = 1400023928
-    identifier = 'willguo'
-    usersig = 'xxdadfadfa'
-    create_chatgroup_restapi = 'https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=' + usersig + '&identifier=' + str(identifier) + "&sdkappid=" + str(sdkappid) + '&random=' + str(
-        ran) + '&contenttype=json'
-    print create_chatgroup_restapi
     app.debug = True
     app.run()
