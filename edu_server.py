@@ -85,11 +85,11 @@ def handle_request():
         # # 创建聊天群组和白板通道
         cg = {'Type': 'ChatRoom',
               'Name': 'chatgroup', 'GroupId': chatgroup_id}
-        cg_res = handle_im_server(sdkappid, identifier, usersig, cg)
+        cg_res = create_im_group(sdkappid, identifier, usersig, cg)
 
         wb = {'Type': 'ChatRoom',
               'Name': 'wbchannel', 'GroupId': wbchannel_id}
-        wb_res = handle_im_server(sdkappid, identifier, usersig, wb)
+        wb_res = create_im_group(sdkappid, identifier, usersig, wb)
 
         logger.info(" 1 destroy_classroom  cb_res  wb_res %s %s ", cg_res, wb_res)
         print " 1 destroy_classroom   wb_res cb_res  ", wb_res,cg_res
@@ -132,10 +132,10 @@ def handle_request():
 
         ###分别解散 wbchannel chatgroup
         wb = {'GroupId': wbchannel}
-        wb_res = handle_im_server(sdkappid, identifier, usersig, wb)
+        wb_res = destory_im_group(sdkappid, identifier, usersig, wb)
 
         cg = {'GroupId': chatgroup}
-        cb_res = handle_im_server(sdkappid, identifier, usersig, cg)
+        cb_res = destory_im_group(sdkappid, identifier, usersig, cg)
 
         logger.info(" 1 destroy_classroom   wb_res %s  ", wb_res)
         logger.info(" 1 destroy_classroom   cb_res  %s ", cb_res)
@@ -208,9 +208,23 @@ def exception_handler(error):
     return response
 
 
-def handle_im_server(sdkappid, identifier, usersig, param):
+def destory_im_group(sdkappid, identifier, usersig, param):
     ran2 = random.randint(0, 99999999)
     destroy_group_restapi = 'https://console.tim.qq.com/v4/group_open_http_svc/destroy_group?usersig=' + usersig + '&identifier=' + str(
+        identifier) + "&sdkappid=" + str(sdkappid) + '&random=' + str(ran2) + '&contenttype=json'
+    logger.info("create_room_restapi  %s    ", destroy_group_restapi)
+
+    res = requests.post(destroy_group_restapi,
+                        data=json.dumps(param))
+    logger.info(" handle_im_server    %s  ", res.text)
+    print" handle_im_server    ", res.text
+
+    return res.text
+
+
+def create_im_group(sdkappid, identifier, usersig, param):
+    ran2 = random.randint(0, 99999999)
+    destroy_group_restapi = 'https://console.tim.qq.com/v4/group_open_http_svc/create_group?usersig=' + usersig + '&identifier=' + str(
         identifier) + "&sdkappid=" + str(sdkappid) + '&random=' + str(ran2) + '&contenttype=json'
     logger.info("create_room_restapi  %s    ", destroy_group_restapi)
 
