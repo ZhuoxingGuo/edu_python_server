@@ -76,6 +76,9 @@ def handle_request():
         wbchannel_id = str(result['wbchannel'])
         chatgroup_id = str(result['chatgroup'])
 
+
+        grouptype = jsondata['grouptype'];
+
         logger.info(" 1 create_classroom request  %s   param %s  classid  %s ", request, jsondata, result)
         print " 1 create_classroom request   ", request
         print " 1 create_classroom param  ", jsondata
@@ -83,7 +86,7 @@ def handle_request():
 
 
         # # 创建聊天群组和白板通道
-        cg = {'Type': 'ChatRoom',
+        cg = {'Type': grouptype,
               'Name': 'chatgroup', 'GroupId': chatgroup_id}
         cg_res = create_im_group(sdkappid, identifier, usersig, cg)
 
